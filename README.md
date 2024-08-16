@@ -41,5 +41,79 @@ ns@https://choyoringattendancelist.streamlit.app/~/+/static/js/main.7e42f54d.js:
 2. 사이드 바 오류 -> css 사이드바 안보이게 작업
 3. 오전 8시 캐시 초기화로 변경
 
+### 업데이트일 : 2024-08-16
+오류 발생
+────────────────────── Traceback (most recent call last) ───────────────────────
+
+  /home/adminuser/venv/lib/python3.10/site-packages/streamlit/runtime/scriptru  
+
+  nner/script_runner.py:589 in _run_script                                      
+
+                                                                                
+
+  /mount/src/attendancecheckcount/main.py:5 in <module>                         
+
+                                                                                
+
+      2 import pandas as pd                                                     
+
+      3 import datetime                                                         
+
+      4 import plotly.express as px                                             
+
+  ❱   5 from streamlit_gsheets import GSheetsConnection                         
+
+      6                                                                         
+
+      7 @st.cache_resource(ttl=43200)                                           
+
+      8 def load_data():                                                        
+
+                                                                                
+
+  /home/adminuser/venv/lib/python3.10/site-packages/streamlit_gsheets/__init__  
+
+  .py:15 in <module>                                                            
+
+                                                                                
+
+    12 # See the License for the specific language governing permissions and    
+
+    13 # limitations under the License.                                         
+
+    14                                                                          
+
+  ❱ 15 from streamlit_gsheets.gsheets_connection import GSheetsConnection  # n  
+
+    16                                                                          
+
+                                                                                
+
+  /home/adminuser/venv/lib/python3.10/site-packages/streamlit_gsheets/gsheets_  
+
+  connection.py:36 in <module>                                                  
+
+                                                                                
+
+     33 from pandas import DataFrame, read_csv                                  
+
+     34 from sql_metadata import Parser                                         
+
+     35 from streamlit.connections import ExperimentalBaseConnection            
+
+  ❱  36 from streamlit.dataframe_util import convert_anything_to_pandas_df, is  
+
+     37 from streamlit.runtime.caching import cache_data                        
+
+     38 from validators.url import url as validate_url                          
+
+     39                                                                         
+
+────────────────────────────────────────────────────────────────────────────────
+
+ModuleNotFoundError: No module named 'streamlit.dataframe_util'
+
+
+
 ### 업데이트일 : 2024-06-15
 1. 캐시데이터 유효기간으로 변경(ttl) 12h
