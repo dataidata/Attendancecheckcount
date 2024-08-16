@@ -45,7 +45,8 @@ ns@https://choyoringattendancelist.streamlit.app/~/+/static/js/main.7e42f54d.js:
 1. 캐시데이터 유효기간으로 변경(ttl) 12h
 
 ### 업데이트일 : 2024-08-16
-오류 발생
+오류 발생 ->
+```
 ────────────────────── Traceback (most recent call last) ───────────────────────
 
   /home/adminuser/venv/lib/python3.10/site-packages/streamlit/runtime/scriptru  
@@ -115,7 +116,7 @@ ns@https://choyoringattendancelist.streamlit.app/~/+/static/js/main.7e42f54d.js:
 ────────────────────────────────────────────────────────────────────────────────
 
 ModuleNotFoundError: No module named 'streamlit.dataframe_util'
-
+```
 
 
 
