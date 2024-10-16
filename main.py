@@ -6,7 +6,7 @@ from streamlit_gsheets import GSheetsConnection
 
 @st.cache_resource(ttl=43200)
 def load_data():
-    conn = st.connection("gsheets", type=GSheetsConnection, spreadsheet="1kIAeoOFlWrImOK1-8rydxSr_EhG3a5KdYh6nH8-CTro")
+    conn = st.connection("gsheets", type=GSheetsConnection)
     df = conn.read(usecols=[0, 1, 2, 3])
     df = df.dropna(subset=['date'])
     df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
