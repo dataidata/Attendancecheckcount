@@ -6,3 +6,4 @@ numpy
 openpyxl
 requests
 plotly
+git+https://github.com/streamlit/gsheets-connection
