@@ -4,6 +4,7 @@ import datetime
 import plotly.express as px
 from streamlit_gsheets import GSheetsConnection
 
+
 @st.cache_resource(ttl=43200)
 def load_data():
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -12,6 +13,7 @@ def load_data():
     df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
     df.drop_duplicates(subset=['date', 'name'], keep='first', inplace=True)
     return df
+
 
 @st.cache_data(ttl=43200)
 def attend_df(df):
@@ -28,14 +30,15 @@ def attend_df(df):
     sparkline_df = attendance_df[['name', 'attendance']].rename(columns={'attendance': 'attendance_state'})
     sparkline_df = sparkline_df[['name', 'attendance_state']]
     return sparkline_df
-    
+
+
 # 상호작용 비활성화 설정
 config = {
-    'staticPlot': True,          # 차트를 정적 이미지로 표시
-    'scrollZoom': False,         # 스크롤을 통한 줌 비활성화
-    'doubleClick': 'reset',      # 더블클릭 시 줌 리셋 비활성화
-    'showTips': False,           # 차트 툴팁 비활성화
-    'displayModeBar': False      # 모드바 (상단 툴바) 비활성화
+    'staticPlot': True,  # 차트를 정적 이미지로 표시
+    'scrollZoom': False,  # 스크롤을 통한 줌 비활성화
+    'doubleClick': 'reset',  # 더블클릭 시 줌 리셋 비활성화
+    'showTips': False,  # 차트 툴팁 비활성화
+    'displayModeBar': False  # 모드바 (상단 툴바) 비활성화
 }
 
 # 데이터 로드
@@ -71,7 +74,7 @@ elif start_date.date() == end_date.date():
     one_date = one_date.copy()  # 슬라이스된 DataFrame의 복사본 생성
     one_date['date'] = one_date['date'].apply(lambda x: pd.to_datetime(x).strftime('%Y-%m-%d'))
     st.write('출석 한 사람 : ', str(one_date.shape[0]), '명')
-    st.dataframe(one_date, hide_index = True)
+    st.dataframe(one_date, hide_index=True)
 
 elif updated_date < end_date.date():
     st.warning('{} 이후 데이터가 없습니다.'.format(updated_date_d_1))
@@ -84,20 +87,25 @@ else:
     filtered_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
 
     # 출석 많이 한 사람
-    top_cnt_users = filtered_df['name'].value_counts().reset_index()[:7]
-    top_cnt_users = top_cnt_users.sort_values(by='name', ascending=True)
+    top_cnt_users = filtered_df['name'].value_counts().reset_index()
+    top_cnt_users.columns = ['name', 'count']  # 열 이름을 지정
+
+    # 출석 수에 따라 내림차순 정렬
+    top_cnt_users = top_cnt_users.sort_values(by='count', ascending=False).head(7).sort_values(by='count',ascending=True)
+
     # 시각화
-    fig_cnt = px.bar(x=top_cnt_users['name'], y=top_cnt_users['index'], orientation='h')
+    fig_cnt = px.bar(x=top_cnt_users['count'], y=top_cnt_users['name'], orientation='h')  # y축에 이름, x축에 count
     fig_cnt.update_traces(marker_color='blueviolet')
-    fig_cnt.update_layout(title='출석 많이 한 사람~!', xaxis_title = 'Count' ,yaxis_title='User')
+    fig_cnt.update_layout(title='출석 많이 한 사람~!', xaxis_title='Count', yaxis_title='User')
     fig_cnt.update_layout(margin=dict(l=20, r=20, t=30, b=20), height=300)
+
     st.plotly_chart(fig_cnt, use_container_width=True, config=config)
 
     # 출석 빨리 한 사람
     top_fast_users = filtered_df[filtered_df['idx'] == 1]['name'].value_counts()[:5].sort_values(ascending=True)
     # 시각화
     fig_fast = px.bar(x=top_fast_users.values, y=top_fast_users.index, orientation='h')
-    fig_fast.update_layout(title='출석 빨리 한 사람~!', xaxis_title = 'Count' ,yaxis_title='User')
+    fig_fast.update_layout(title='출석 빨리 한 사람~!', xaxis_title='Count', yaxis_title='User')
     fig_fast.update_layout(margin=dict(l=20, r=20, t=30, b=20), height=300)
     st.plotly_chart(fig_fast, use_container_width=True, config=config)
 
@@ -134,8 +142,8 @@ with st.sidebar:
     st.sidebar.title('스파크차트')
     st.data_editor(
         attend_df,
-        width= 350,
-        height= 600,
+        width=350,
+        height=600,
         column_config={
             "attendance_state": st.column_config.LineChartColumn(
                 "attendance_state",
